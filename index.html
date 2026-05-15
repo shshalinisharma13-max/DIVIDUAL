@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dividual Personality Quiz</title>
+
+  <style>
+    :root {
+      --blue: #1e63ff;
+      --soft-blue: #eaf1ff;
+      --dark-blue: #071a4a;
+      --white: #ffffff;
+      --grey: #6b7280;
+      --border: rgba(30, 99, 255, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, #dce9ff 0%, transparent 32%),
+        radial-gradient(circle at bottom right, #f2f7ff 0%, transparent 28%),
+        linear-gradient(180deg, #ffffff 0%, #edf4ff 100%);
+      color: var(--dark-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .phone {
+      width: 100%;
+      max-width: 430px;
+      min-height: 680px;
+      background: rgba(255, 255, 255, 0.88);
+      border: 1px solid var(--border);
+      border-radius: 34px;
+      box-shadow: 0 24px 80px rgba(30, 99, 255, 0.18);
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(16px);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 74px;
+      height: 6px;
+      background: #d7e4ff;
+      border-radius: 999px;
+    }
+
+    .content {
+      padding-top: 34px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--soft-blue);
+      color: var(--blue);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: 34px;
+      line-height: 1.02;
+      margin: 22px 0 12px;
+      letter-spacing: -0.05em;
+    }
+
+    h2 {
+      font-size: 24px;
+      line-height: 1.14;
+      margin: 18px 0 16px;
+      letter-spacing: -0.035em;
+    }
+
+    p {
+      color: var(--grey);
+      font-size: 15px;
+      line-height: 1.55;
+      margin: 0 0 18px;
+    }
+
+    .small {
+      font-size: 12px;
+      color: #7a86a0;
+    }
+
+    .question-number {
+      margin-top: 24px;
+      font-size: 13px;
+      color: var(--blue);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .options {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .option {
+      width: 100%;
+      text-align: left;
+      padding: 17px 18px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      color: var(--dark-blue);
+      box-shadow: 0 8px 24px rgba(30, 99, 255, 0.08);
+      transition: transform 0.16s ease, box-shadow 0.16s ease, border 0.16s ease;
+    }
+
+    .option:hover,
+    .option:active {
+      transform: translateY(-2px);
+      border-color: rgba(30, 99, 255, 0.42);
+      box-shadow: 0 12px 30px rgba(30, 99, 255, 0.14);
+    }
+
+    .letter {
+      display: inline-flex;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      background: var(--soft-blue);
+      color: var(--blue);
+      font-weight: 800;
+      margin-right: 10px;
+    }
+
+    .start-button,
+    .reset-button {
+      width: 100%;
+      margin-top: 24px;
+      padding: 17px 18px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: white;
+      font-weight: 800;
+      box-shadow: 0 16px 36px rgba(30, 99, 255, 0.28);
+    }
+
+    .result-card {
+      margin-top: 26px;
+      padding: 24px;
+      border-radius: 26px;
+      background: linear-gradient(180deg, #ffffff 0%, #eaf1ff 100%);
+      border: 1px solid var(--border);
+      box-shadow: 0 16px 50px rgba(30, 99, 255, 0.14);
+      text-align: center;
+    }
+
+    .percent {
+      font-size: 62px;
+      font-weight: 900;
+      letter-spacing: -0.08em;
+      color: var(--blue);
+      margin: 6px 0;
+    }
+
+    .compliant {
+      margin-top: 18px;
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 950;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--dark-blue);
+    }
+
+    .feedback {
+      color: var(--grey);
+      margin-top: 12px;
+    }
+
+    .scanline {
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        to bottom,
+        rgba(30, 99, 255, 0.025),
+        rgba(30, 99, 255, 0.025) 1px,
+        transparent 1px,
+        transparent 7px
+      );
+      pointer-events: none;
+      opacity: 0.75;
+    }
+
+    .footer-note {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: #8b95aa;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="phone">
+    <div class="scanline"></div>
+
+    <section class="content" id="app"></section>
+
+    <div class="footer-note">
+      Dividual Systems™ · Behavioural Softness Interface
+    </div>
+  </main>
+
+  <script>
+    const questions = [
+      {
+        text: "You and your friends are rather invested in a lively online discussion about whether pineapple belongs on pizza. Which role do you play?",
+        options: [
+          "The mediator",
+          "The observer",
+          "The troll"
+        ]
+      },
+      {
+        text: "You get a scam email. What do you do with it?",
+        options: [
+          "Delete and report the email",
+          "Leave the email unopened",
+          "Reply to the scammer and ragebait them"
+        ]
+      },
+      {
+        text: "You walk into an exhibition room at the Hidden Door Festival. What do you do first?",
+        options: [
+          "Soak in the retro-futuristic atmosphere",
+          "Wander around aimlessly",
+          "Turn around and walk back out"
+        ]
+      },
+      {
+        text: "You have been filling out a personality quiz for a while, but the scenarios are becoming strangely specific. What do you do?",
+        options: [
+          "Continue answering like you did before",
+          "Hesitate, then start choosing A for everything",
+          "Start making unpredictable choices"
+        ]
+      },
+      {
+        text: "You realise you have been watched the whole time you were in this room. What do you do?",
+        options: [
+          "Acknowledge the surveillance, keep calm, and carry on",
+          "Submit without resistance",
+          "Accept your fate"
+        ]
+      }
+    ];
+
+    const app = document.getElementById("app");
+
+    const params = new URLSearchParams(window.location.search);
+    let q = Number(params.get("q"));
+
+    if (!q || q < 1 || q > questions.length) {
+      showWelcome();
+    } else {
+      showQuestion(q - 1);
+    }
+
+    function showWelcome() {
+      app.innerHTML = `
+        <div class="badge">Anonymous Personality Quiz</div>
+        <h1>Welcome to Dividual.</h1>
+        <p>
+          By filling out this completely anonymous personality quiz, you are agreeing to have fun,
+          reflect on your choices, and maybe become eligible for an exclusive prototype of a Dividual product.
+        </p>
+        <p>
+          This playful quiz explores everyday decision-making, online behaviour, group dynamics,
+          and the tiny moments where personality becomes data.
+        </p>
+        <p class="small">
+          Please scan one of the question QR codes in the room to begin.
+        </p>
+      `;
+    }
+
+    function showQuestion(index) {
+      const question = questions[index];
+      const optionLetters = ["A", "B", "C"];
+
+      app.innerHTML = `
+        <div class="badge">Dividual Personality Scan</div>
+        <div class="question-number">Question ${index + 1} / ${questions.length}</div>
+        <h2>${question.text}</h2>
+        <p>Choose the answer that feels most natural. Do not overthink it. Overthinking has already been recorded emotionally.</p>
+
+        <div class="options">
+          ${question.options.map((option, i) => `
+            <button class="option" onclick="showResult(${index}, ${i})">
+              <span class="letter">${optionLetters[i]}</span>
+              ${option}
+            </button>
+          `).join("")}
+        </div>
+      `;
+    }
+
+    function showResult(questionIndex, optionIndex) {
+      const percentage = randomInt(65, 80);
+      const selectedText = questions[questionIndex].options[optionIndex];
+
+      const feedbackLines = [
+        "Your choice aligns with the behavioural majority.",
+        "Your response has been interpreted as socially compatible.",
+        "Your decision has been smoothed into the collective pattern.",
+        "Deviation level: acceptably low.",
+        "Thank you for optimising yourself."
+      ];
+
+      const feedback = feedbackLines[randomInt(0, feedbackLines.length - 1)];
+
+      app.innerHTML = `
+        <div class="badge">Result Generated</div>
+
+        <div class="result-card">
+          <p>You selected:</p>
+          <h2>${selectedText}</h2>
+
+          <div class="percent">${percentage}%</div>
+
+          <p>
+            of participants also selected this response.
+          </p>
+
+          <div class="compliant">You are compliant.</div>
+
+          <p class="feedback">${feedback}</p>
+        </div>
+
+        <button class="reset-button" onclick="showQuestion(${questionIndex})">
+          Reconsider your behaviour
+        </button>
+      `;
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+  </script>
+</body>
+</html>
